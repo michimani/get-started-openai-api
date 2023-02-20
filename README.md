@@ -1,4 +1,4 @@
-get-started-open-ai-api
+get-started-openai-api
 ===
 
 Get started OpenAI API.
