@@ -49,6 +49,60 @@ query
 明日は晴れ。
 ```
 
+## Chat Completion
+
+```bash
+python chat.py 'あなたは電卓です。計算結果となる数字だけを答えてください。' '1+1='
+```
+
+Output
+
+```
+assistant: 2
+
+
+current chat id: chatcmpl-6pelWDjzxVZayS4VMUj4kr6VCblYN
+```
+
+If you wish to continue chatting with the context of this conversation, pass the output Chat ID as the third argument.
+
+```bash
+python chat.py '' '*2=' chatcmpl-6pelWDjzxVZayS4VMUj4kr6VCblYN
+```
+
+```
+assistant: 4
+
+
+current chat id: chatcmpl-6penzqAybDnsDkmCfA4Fwk7NSu8Et
+```
+
+One more times.
+
+```bash
+python chat.py '' '**2=' chatcmpl-6penzqAybDnsDkmCfA4Fwk7NSu8Et
+```
+
+```
+assistant: 16
+
+
+current chat id: chatcmpl-6pep5Hn9PI1psGSXLQVusGNP0PcJS
+```
+
+One more..
+
+```bash
+python chat.py '' '**2=' chatcmpl-6pep5Hn9PI1psGSXLQVusGNP0PcJS
+```
+
+```
+assistant: 256
+
+
+current chat id: chatcmpl-6pepyrUMWDlXldx49uU1FgGVOkmgt
+```
+
 # Author
 
 [michimani210](https://twitter.com/michimani210)
