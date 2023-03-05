@@ -1,5 +1,5 @@
 import sys
-from token_count import tokens
+from util.token_count import tokens
 from util.client import init_openai
 
 

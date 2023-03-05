@@ -1,4 +1,3 @@
-
 import unittest
 from collections import namedtuple
 from token_count import tokens
