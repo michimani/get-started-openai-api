@@ -2,38 +2,22 @@ import sys
 import os
 import json
 from util.client import init_openai
+from util.token_count import tokens
 
 MODEL_FOR_CHAT_COMPLETION = 'gpt-3.5-turbo'
 
 
-def chat_completion(client, base_content, query, chat_id):
-    messages = []
-    if chat_id != '':
-        messages = load_chat_history(chat_id)
-
-    if len(messages) == 0:
-        messages = [
-            {'role': 'system', 'content': base_content}
-        ]
-
-    messages.append({
-        'role': 'user', 'content': query
-    })
-
+def chat_completion(client, messages):
     res = client.ChatCompletion.create(
         model=MODEL_FOR_CHAT_COMPLETION,
         messages=messages
     )
 
-    chat_id = res['id']
-
     for c in res.choices:
         print('{}: {}\n'.format(c['message']['role'], c['message']['content']))
         messages.append(c['message'])
 
-    save_chat_history(chat_id, messages)
-    print()
-    print('current chat id: {}'.format(chat_id))
+    return res.usage['total_tokens']
 
 
 CHAT_HISTORY_DIR = './chat_history'
@@ -54,22 +38,48 @@ def save_chat_history(chat_id, messages):
         json.dump(messages, f, ensure_ascii=False, indent=2)
 
 
+TOKENS_LIMIT = 4096
+
+
 if __name__ == "__main__":
     client = init_openai()
 
     args = sys.argv
 
-    if len(args) < 3:
-        print('1st parameter: base content for system role')
-        print('2nd parameter: your message')
-        print('3rd parameter (option): chat ID of history')
-        exit()
+    messages = []
+    if len(args) > 1 and len(args[1]) > 0:
+        messages.append({
+            'role': 'system',
+            'content': args[1],
+        })
 
-    base_content = args[1]
-    query = args[2]
+    tokens_total = 0
 
-    chat_id = ''
-    if len(args) > 3:
-        chat_id = args[3]
+    while tokens_total < TOKENS_LIMIT:
+        try:
+            query = input(
+                'Please enter your message (press `Ctr + C` to end chat) \n>> ')
 
-    chat_completion(client, base_content, query, chat_id)
+            if len(query) == 0:
+                continue
+
+            _, count = tokens(query)
+            if (tokens_total + count) > TOKENS_LIMIT:
+                print('Your message is too long.')
+                print('Please enter your message less than {} tokens.'.format(
+                    TOKENS_LIMIT - (tokens_total)))
+                continue
+
+            messages.append({
+                'role': 'user',
+                'content': query,
+            })
+
+            usage = chat_completion(client, messages)
+            tokens_total += usage
+            print('(current token total: {})\n'.format(tokens_total))
+
+        except KeyboardInterrupt:
+            print()
+            print('See you again.')
+            exit()

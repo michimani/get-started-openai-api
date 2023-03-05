@@ -51,8 +51,20 @@ query
 
 ## Chat Completion
 
+### Simple Chat
+
 ```bash
-python chat.py 'あなたは電卓です。計算結果となる数字だけを答えてください。' '1+1='
+python chat.py
+Please enter your message (press `Ctr + C` to end chat) 
+ >>
+```
+
+### Whit Context
+
+```bash
+python chat.py 'あなたは電卓です。計算結果となる数字だけを答えてください。' 
+Please enter your message (press `Ctr + C` to end chat) 
+>> '1+1'
 ```
 
 Output
@@ -60,47 +72,30 @@ Output
 ```
 assistant: 2
 
-
-current chat id: chatcmpl-6pelWDjzxVZayS4VMUj4kr6VCblYN
+Please enter your message (press `Ctr + C` to end chat) 
+>>
 ```
 
 If you wish to continue chatting with the context of this conversation, pass the output Chat ID as the third argument.
 
 ```bash
-python chat.py '' '*2=' chatcmpl-6pelWDjzxVZayS4VMUj4kr6VCblYN
+Please enter your message (press `Ctr + C` to end chat) 
+>> '*2='
 ```
 
 ```
 assistant: 4
 
-
-current chat id: chatcmpl-6penzqAybDnsDkmCfA4Fwk7NSu8Et
+Please enter your message (press `Ctr + C` to end chat) 
+>>
 ```
 
-One more times.
+Press `Ctr + C` to end chat.
 
 ```bash
-python chat.py '' '**2=' chatcmpl-6penzqAybDnsDkmCfA4Fwk7NSu8Et
-```
-
-```
-assistant: 16
-
-
-current chat id: chatcmpl-6pep5Hn9PI1psGSXLQVusGNP0PcJS
-```
-
-One more..
-
-```bash
-python chat.py '' '**2=' chatcmpl-6pep5Hn9PI1psGSXLQVusGNP0PcJS
-```
-
-```
-assistant: 256
-
-
-current chat id: chatcmpl-6pepyrUMWDlXldx49uU1FgGVOkmgt
+Please enter your message (press `Ctr + C` to end chat) 
+>> ^C
+See you again.
 ```
 
 # Author
