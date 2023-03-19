@@ -1,3 +1,4 @@
+import time
 import sys
 import os
 import json
@@ -10,14 +11,32 @@ MODEL_FOR_CHAT_COMPLETION = 'gpt-3.5-turbo'
 def chat_completion(client, messages):
     res = client.ChatCompletion.create(
         model=MODEL_FOR_CHAT_COMPLETION,
-        messages=messages
+        messages=messages,
+        stream=True
     )
 
-    for c in res.choices:
-        print('{}: {}\n'.format(c['message']['role'], c['message']['content']))
-        messages.append(c['message'])
 
-    return res.usage['total_tokens']
+    message = {
+        "role": "",
+        "content": ""
+    }
+    tmp_messages = []
+    for chunk in res:
+        chunk_message = chunk['choices'][0]['delta']
+        if chunk['choices'][0]['finish_reason'] is not None:
+            break
+
+        if 'role' in chunk_message:
+            message['role'] = chunk_message['role']
+        else:
+            tmp_messages.append(chunk_message['content'])
+            print(chunk_message['content'], end='')
+
+    message['content'] = ''.join(tmp_messages)
+
+    messages.append(message)
+
+    return len(tmp_messages)
 
 
 CHAT_HISTORY_DIR = './chat_history'
@@ -77,7 +96,7 @@ if __name__ == "__main__":
 
             usage = chat_completion(client, messages)
             tokens_total += usage
-            print('(current token total: {})\n'.format(tokens_total))
+            print('\n\n(current token total: {})\n'.format(tokens_total))
 
         except KeyboardInterrupt:
             print()
