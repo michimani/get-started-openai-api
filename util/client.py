@@ -1,7 +1,7 @@
 import openai
 import os
 
-EMBEDDING_MODEL = 'text-embedding-ada-002'
+EMBEDDING_MODEL = "text-embedding-ada-002"
 TOKEN_LIMIT = 8191
 
 

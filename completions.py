@@ -3,18 +3,15 @@ from util.token_count import tokens
 from util.client import init_openai
 
 
-MODEL_FOR_COMPLETION = 'text-ada-001'
+MODEL_FOR_COMPLETION = "text-ada-001"
 
 
 def completion(client, query):
     tks, count = tokens(query)
-    print('token count:{} tokens:{}\nquery\n-----\n{}\n-----'.format(count, tks, query))
+    print("token count:{} tokens:{}\nquery\n-----\n{}\n-----".format(count, tks, query))
 
     res = client.Completion.create(
-        model=MODEL_FOR_COMPLETION,
-        prompt=query,
-        max_tokens=count,
-        temperature=0
+        model=MODEL_FOR_COMPLETION, prompt=query, max_tokens=count, temperature=0
     )
 
     for choice in res.choices:
