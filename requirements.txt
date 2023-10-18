@@ -19,5 +19,5 @@ requests==2.31.0
 tiktoken==0.2.0
 tomli==2.0.1
 tqdm==4.64.1
-urllib3==1.26.17
+urllib3==1.26.18
 yarl==1.8.2
